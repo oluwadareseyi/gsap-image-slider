@@ -32,7 +32,7 @@ function App() {
   let imageList = useRef(null);
   let quotesList = useRef(null);
 
-  const [state, setState] = useState();
+  const [activeSlide, setactiveSlide] = useState(1);
 
   useEffect(() => {
     gsap.to(quotesList.children[0], {
@@ -52,15 +52,11 @@ function App() {
         <div className="inner">
           <div className="t-image">
             <ul ref={(el) => (imageList = el)}>
-              <li>
-                <img src={testimonials[0].image} alt={testimonials[0].name} />
-              </li>
-              <li>
-                <img src={testimonials[1].image} alt={testimonials[1].name} />
-              </li>
-              <li>
-                <img src={testimonials[2].image} alt={testimonials[2].name} />
-              </li>
+              {testimonials.map(({ name, image }, i) => (
+                <li>
+                  <img src={image} alt={name} />
+                </li>
+              ))}
             </ul>
           </div>
 
