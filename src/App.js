@@ -26,11 +26,21 @@ const testimonials = [
     quote:
       "The service was excellent. Absolutely wonderful! A complete redesign did it for us.",
   },
+
+  {
+    name: "Seyi Oluwadare",
+    title: "Brand Coordinator, Ijaya",
+    image: `${require("./assets/image2.jpg")}`,
+    quote:
+      "The service was Amazing!!. Absolutely wonderful! A complete redesign did it for us.",
+  },
 ];
 
 function App() {
   let imageList = useRef(null);
   let quotesList = useRef(null);
+
+  const imageWidth = 340;
 
   const [activeSlide, setActiveSlide] = useState(1);
 
@@ -41,6 +51,31 @@ function App() {
     });
   }, []);
 
+  const slideLeft = (index, duration, multiple = 1) => {
+    gsap.to(imageList.children[index], {
+      duration,
+      x: -imageWidth * multiple,
+      ease: "Power3.easeOut",
+    });
+  };
+
+  const slideRight = (index, duration, multiple = 1) => {
+    console.log(index, multiple);
+    gsap.to(imageList.children[index], {
+      duration,
+      x: imageWidth * multiple,
+      ease: "Power3.easeOut",
+    });
+  };
+
+  const scaleOut = (index) => {
+    gsap.from(imageList.children[index], {
+      duration: 1,
+      scale: 1.2,
+      ease: "Power3.easeOut",
+    });
+  };
+
   const nextSlide = () => {
     // if (imageList.children[0].classList.contains("active")) {
     //   setActiveSlide(2);
@@ -48,11 +83,64 @@ function App() {
 
     if (activeSlide === testimonials.length) return;
     setActiveSlide(activeSlide + 1);
+
+    if (activeSlide > 1) {
+      slideLeft(activeSlide - 2, 1, activeSlide);
+      slideLeft(activeSlide - 1, 1, activeSlide);
+      scaleOut(activeSlide);
+      slideLeft(activeSlide, 1, activeSlide);
+    } else {
+      slideLeft(activeSlide - 1, 1, activeSlide);
+      slideLeft(activeSlide, 1, activeSlide);
+      scaleOut(activeSlide);
+      slideLeft(activeSlide + 1, 1, activeSlide);
+    }
+
+    gsap.to(quotesList.children[activeSlide - 1], {
+      duration: 1,
+      opacity: 0,
+    });
+
+    gsap.to(quotesList.children[activeSlide], {
+      delay: 0.2,
+      duration: 1,
+      opacity: 1,
+      ease: "Power3.easeOut",
+    });
+  };
+
+  const prevSlide = () => {
+    if (activeSlide === 1) return;
+    setActiveSlide(activeSlide - 1);
+
+    if (activeSlide > 2) {
+      slideRight(activeSlide - 3, 1, activeSlide - 4);
+      slideRight(activeSlide - 2, 1, activeSlide - 4);
+      slideRight(activeSlide - 1, 1, activeSlide - 4);
+    } else {
+      slideRight(activeSlide - 2, 1, activeSlide - 2);
+      slideRight(activeSlide - 1, 1, activeSlide - 2);
+      slideRight(activeSlide, 1, activeSlide - 2);
+    }
+
+    gsap.to(quotesList.children[activeSlide - 1], {
+      duration: 1,
+      opacity: 0,
+    });
+
+    gsap.to(quotesList.children[activeSlide - 2], {
+      delay: 0.2,
+      duration: 1,
+      opacity: 1,
+      ease: "Power3.easeOut",
+    });
+
+    // slideRight(activeSlide - 1, 1, activeSlide);
   };
   return (
     <div className="testimonial-section">
       <div className="testimonial-container">
-        <div className="arrows left">
+        <div onClick={prevSlide} className="arrows left">
           <span>
             <img src={leftArrow} alt="left arrow" />
           </span>
@@ -74,29 +162,18 @@ function App() {
 
           <div className="t-content">
             <ul ref={(el) => (quotesList = el)}>
-              <li>
-                <div className="content-inner">
-                  <p className="quote">{testimonials[0].quote}</p>
-                  <h3 className="name">{testimonials[0].name}</h3>
-                  <h4 className="title">{testimonials[0].title}</h4>
-                </div>
-              </li>
-
-              <li>
-                <div className="content-inner">
-                  <p className="quote">{testimonials[1].quote}</p>
-                  <h3 className="name">{testimonials[1].name}</h3>
-                  <h4 className="title">{testimonials[1].title}</h4>
-                </div>
-              </li>
-
-              <li>
-                <div className="content-inner">
-                  <p className="quote">{testimonials[2].quote}</p>
-                  <h3 className="name">{testimonials[2].name}</h3>
-                  <h4 className="title">{testimonials[2].title}</h4>
-                </div>
-              </li>
+              {testimonials.map(({ name, quote, title }, i) => (
+                <li
+                  key={name}
+                  className={`${activeSlide === i + 1 ? "active" : ""}`}
+                >
+                  <div className="content-inner">
+                    <p className="quote">{quote}</p>
+                    <h3 className="name">{name}</h3>
+                    <h4 className="title">{title}</h4>
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
