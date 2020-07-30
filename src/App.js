@@ -43,6 +43,7 @@ function App() {
   const imageWidth = 340;
 
   const [activeSlide, setActiveSlide] = useState(1);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     gsap.to(quotesList.children[0], {
@@ -76,25 +77,33 @@ function App() {
     });
   };
 
+  const disableButton = () => {
+    setDisabled(true);
+
+    setTimeout(() => setDisabled(false), 500);
+  };
+
   const nextSlide = () => {
     // if (imageList.children[0].classList.contains("active")) {
     //   setActiveSlide(2);
     // }
+    disableButton();
 
     if (activeSlide === testimonials.length) return;
     setActiveSlide(activeSlide + 1);
 
-    if (activeSlide > 1) {
-      slideLeft(activeSlide - 2, 1, activeSlide);
-      slideLeft(activeSlide - 1, 1, activeSlide);
-      scaleOut(activeSlide);
-      slideLeft(activeSlide, 1, activeSlide);
-    } else {
-      slideLeft(activeSlide - 1, 1, activeSlide);
-      slideLeft(activeSlide, 1, activeSlide);
-      scaleOut(activeSlide);
-      slideLeft(activeSlide + 1, 1, activeSlide);
-    }
+    // if (activeSlide > 1) {
+    testimonials.map((_, i) => slideLeft(i, 1, activeSlide));
+
+    // slideLeft(activeSlide - 1, 1, activeSlide);
+    // slideLeft(activeSlide, 1, activeSlide);
+    // }
+    // else {
+    //   slideLeft(activeSlide - 1, 1, activeSlide);
+    //   slideLeft(activeSlide, 1, activeSlide);
+    //   slideLeft(activeSlide + 1, 1, activeSlide);
+    // }
+    scaleOut(activeSlide);
 
     gsap.to(quotesList.children[activeSlide - 1], {
       duration: 1,
@@ -110,18 +119,30 @@ function App() {
   };
 
   const prevSlide = () => {
+    disableButton();
+
     if (activeSlide === 1) return;
     setActiveSlide(activeSlide - 1);
 
-    if (activeSlide > 2) {
-      slideRight(activeSlide - 3, 1, activeSlide - 4);
-      slideRight(activeSlide - 2, 1, activeSlide - 4);
-      slideRight(activeSlide - 1, 1, activeSlide - 4);
-    } else {
-      slideRight(activeSlide - 2, 1, activeSlide - 2);
-      slideRight(activeSlide - 1, 1, activeSlide - 2);
-      slideRight(activeSlide, 1, activeSlide - 2);
-    }
+    // if (activeSlide > 2) {
+    //   // slideRight(activeSlide - 3, 1, activeSlide - 4);
+    //   // slideRight(activeSlide - 2, 1, activeSlide - 4);
+    //   // slideRight(activeSlide - 1, 1, activeSlide - 4);
+    // testimonials.map((_, i) => slideRight(i, 1, activeSlide - 3));
+
+    // } else {
+    // //   slideRight(activeSlide - 2, 1, activeSlide - 2);
+    // //   slideRight(activeSlide - 1, 1, activeSlide - 2);
+    // //   slideRight(activeSlide, 1, activeSlide - 2);
+    // // 
+    // testimonials.map((_, i) => slideRight(i, 1, activeSlide - 2));
+    // }
+
+    console.log(activeSlide);
+
+    testimonials.map((_, i) => slideRight(i, 1, 2 - activeSlide ));
+
+
 
     gsap.to(quotesList.children[activeSlide - 1], {
       duration: 1,
@@ -134,17 +155,15 @@ function App() {
       opacity: 1,
       ease: "Power3.easeOut",
     });
-
-    // slideRight(activeSlide - 1, 1, activeSlide);
   };
   return (
     <div className="testimonial-section">
       <div className="testimonial-container">
-        <div onClick={prevSlide} className="arrows left">
+        <button disabled={disabled} onClick={prevSlide} className="arrows left">
           <span>
             <img src={leftArrow} alt="left arrow" />
           </span>
-        </div>
+        </button>
 
         <div className="inner">
           <div className="t-image">
@@ -178,11 +197,15 @@ function App() {
           </div>
         </div>
 
-        <div onClick={nextSlide} className="arrows right">
+        <button
+          disabled={disabled}
+          onClick={nextSlide}
+          className="arrows right"
+        >
           <span>
             <img src={rightArrow} alt="right arrow" />
           </span>
-        </div>
+        </button>
       </div>
     </div>
   );
