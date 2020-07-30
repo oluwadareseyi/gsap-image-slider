@@ -61,7 +61,6 @@ function App() {
   };
 
   const slideRight = (index, duration, multiple = 1) => {
-    console.log(index, multiple);
     gsap.to(imageList.children[index], {
       duration,
       x: imageWidth * multiple,
@@ -138,7 +137,6 @@ function App() {
     // testimonials.map((_, i) => slideRight(i, 1, activeSlide - 2));
     // }
 
-    console.log(activeSlide);
 
     testimonials.map((_, i) => slideRight(i, 1, 2 - activeSlide ));
 
