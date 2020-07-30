@@ -32,7 +32,7 @@ function App() {
   let imageList = useRef(null);
   let quotesList = useRef(null);
 
-  const [activeSlide, setactiveSlide] = useState(1);
+  const [activeSlide, setActiveSlide] = useState(1);
 
   useEffect(() => {
     gsap.to(quotesList.children[0], {
@@ -40,6 +40,15 @@ function App() {
       opacity: 1,
     });
   }, []);
+
+  const nextSlide = () => {
+    // if (imageList.children[0].classList.contains("active")) {
+    //   setActiveSlide(2);
+    // }
+
+    if (activeSlide === testimonials.length) return;
+    setActiveSlide(activeSlide + 1);
+  };
   return (
     <div className="testimonial-section">
       <div className="testimonial-container">
@@ -92,7 +101,7 @@ function App() {
           </div>
         </div>
 
-        <div className="arrows right">
+        <div onClick={nextSlide} className="arrows right">
           <span>
             <img src={rightArrow} alt="right arrow" />
           </span>
