@@ -53,7 +53,10 @@ function App() {
           <div className="t-image">
             <ul ref={(el) => (imageList = el)}>
               {testimonials.map(({ name, image }, i) => (
-                <li>
+                <li
+                  key={name}
+                  className={`${activeSlide === i + 1 ? "active" : ""}`}
+                >
                   <img src={image} alt={name} />
                 </li>
               ))}
