@@ -34,6 +34,14 @@ const testimonials = [
     quote:
       "The service was Amazing!!. Absolutely wonderful! A complete redesign did it for us.",
   },
+
+  {
+    name: "Mark Jacobs",
+    title: "Tech Lead, Google",
+    image: `${require("./assets/image.jpg")}`,
+    quote:
+      "The rebranding has really helped our business. Definitely worth the investment.",
+  },
 ];
 
 function App() {
@@ -133,14 +141,11 @@ function App() {
     // //   slideRight(activeSlide - 2, 1, activeSlide - 2);
     // //   slideRight(activeSlide - 1, 1, activeSlide - 2);
     // //   slideRight(activeSlide, 1, activeSlide - 2);
-    // // 
+    // //
     // testimonials.map((_, i) => slideRight(i, 1, activeSlide - 2));
     // }
 
-
-    testimonials.map((_, i) => slideRight(i, 1, 2 - activeSlide ));
-
-
+    testimonials.map((_, i) => slideRight(i, 1, 2 - activeSlide));
 
     gsap.to(quotesList.children[activeSlide - 1], {
       duration: 1,
